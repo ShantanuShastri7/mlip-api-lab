@@ -28,7 +28,6 @@ def get_itinerary(destination: str) -> Dict[str, Any]:
         messages=[
                 {
                     "role": "system",
-                    # CRITICAL: Llama 3 requires explicit instruction to use JSON
                     "content": "You are a helpful assistant. You must respond with valid JSON only. Do not add any markdown formatting like ```json ... ```."
                 },
                 {
@@ -36,15 +35,12 @@ def get_itinerary(destination: str) -> Dict[str, Any]:
                     "content": f"Extract a structured travel itinerary details from this text into JSON format, the JSON should only include destination, price_range, ideal_visit_times, and top_attractions: {destination}"
                 }
             ],
-            # 3. Enable JSON mode
             response_format={"type": "json_object"}, 
             temperature=0.1
     )    
 
     content_str = data.choices[0].message.content
 
-    # 2. Parse the string into a Python Dictionary
-    # Since you requested JSON mode, this string is valid JSON.
     data = json.loads(content_str)
 
     return data
